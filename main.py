@@ -33,8 +33,7 @@ class Person():
         if  not animation_active:
             if not self.look_right:
                 #TODO:здесь надо развернуть изображение
-                self.person = pygame.image.load("data/person.png")
-                self.weapon = pygame.image.load("data/sword.png")
+                pass
             screen.blit(self.person, (self.position_x, self.position_y))
             screen.blit(self.weapon, (self.position_x, self.position_y))
         else:
@@ -79,10 +78,12 @@ while running:
                 x, y = pygame.mouse.get_pos()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                person.look_right = False
                 person.walk=True
                 animation_active = True
         if event.type == pygame.KEYUP:
             if person.walk:
+                person.look_right=True
                 person.walk = False
                 animation_active= False
     keys = pygame.key.get_pressed()
