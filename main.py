@@ -10,22 +10,38 @@ class Background():
         self.speed = 1
     def bliting(self):
         screen.blit(self.background, (self.position_x, self.position_y))
+class Person():
+    def load_person(self,person):
+        if person ==0:
+            self.person = pygame.image.load("data/person.png")
+            self.weapon = pygame.image.load("data/sword.png")
+        self.position_x = screen_width//2-(self.person.get_width()//2)
+        self.position_y = screen_height-self.person.get_height()-10
+        self.speed = background.speed
+    def bliting(self):
+        screen.blit(self.person, (self.position_x, self.position_y))
+        screen.blit(self.weapon, (self.position_x, self.position_y))
 
-background = Background()
-background.load_background(0)
-background_position_x = 0
-background_position_y = 0
-background_speed = 1
+# class Border(pygame.sprite.Sprite):
+#     def __init__(self,x1,y1,x2,y2):
+#         super().__init__(self)
+
+
 running = True
 pygame.init()
-pygame.display.set_caption('deigstra')
+pygame.display.set_caption('the cool man adventure')
 screen_width, screen_height = 1280, 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 fps = 60
 clock = pygame.time.Clock()
-font = pygame.font.SysFont("Times New Roman", 40)
-menu_button_width = 500
-menu_button_height = 100
+# font = pygame.font.SysFont("Times New Roman", 40)
+# menu_button_width = 500
+# menu_button_height = 100
+
+background = Background()
+background.load_background(0)
+person = Person()
+person.load_person(0)
 
 while running:
     for event in pygame.event.get():
@@ -43,6 +59,7 @@ while running:
 
     screen.fill((0, 0, 0))
     background.bliting()
+    person.bliting()
     pygame.display.update((0,0,screen_width,screen_height))
     clock.tick(fps)
 #updated messenge
