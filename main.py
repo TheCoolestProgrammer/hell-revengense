@@ -15,12 +15,39 @@ class Person():
         if person ==0:
             self.person = pygame.image.load("data/person.png")
             self.weapon = pygame.image.load("data/sword.png")
+            self.look_right = True
+            self.walk_animation =[]
+            self.walk = False
+            self.now_frame= 0
+            self.tics = fps//6
+            self.counter_tics = 0
+            for i in range(1,6):
+                a = pygame.image.load(f"data/person_walk_anim{i}.png")
+
+                self.walk_animation.append(a)
+
         self.position_x = screen_width//2-(self.person.get_width()//2)
         self.position_y = screen_height-self.person.get_height()-10
         self.speed = background.speed
     def bliting(self):
-        screen.blit(self.person, (self.position_x, self.position_y))
-        screen.blit(self.weapon, (self.position_x, self.position_y))
+        if  not animation_active:
+            if not self.look_right:
+                #TODO:здесь надо развернуть изображение
+                self.person = pygame.image.load("data/person.png")
+                self.weapon = pygame.image.load("data/sword.png")
+            screen.blit(self.person, (self.position_x, self.position_y))
+            screen.blit(self.weapon, (self.position_x, self.position_y))
+        else:
+            if self.walk_animation:
+                if self.counter_tics >=self.tics:
+                    self.counter_tics =0
+                    self.now_frame += 1
+                    if not self.look_right:
+                        pass
+                self.counter_tics+=1
+                screen.blit(self.walk_animation[self.now_frame%5], (self.position_x, self.position_y))
+                screen.blit(self.weapon, (self.position_x, self.position_y))
+
 
 # class Border(pygame.sprite.Sprite):
 #     def __init__(self,x1,y1,x2,y2):
@@ -42,7 +69,7 @@ background = Background()
 background.load_background(0)
 person = Person()
 person.load_person(0)
-
+animation_active = False
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -50,6 +77,14 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 x, y = pygame.mouse.get_pos()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                person.walk=True
+                animation_active = True
+        if event.type == pygame.KEYUP:
+            if person.walk:
+                person.walk = False
+                animation_active= False
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         background.position_x += background.speed
